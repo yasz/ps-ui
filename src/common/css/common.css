@@ -1,0 +1,42 @@
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+.weui-search-bar__cancel-btn {
+  color: black;
+}
+
+.ylyric-label{
+  padding-top:6px;
+  padding-right:30px;
+}
+
+.ylyric-btn{
+  margin-top:6px
+}
+
+.ybutton-icon{
+  font-size: 30px;
+}
+
+.ybutton-icon-active{
+  color:#4876FF;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #4876FF;
+  border-color: #4876FF;
+}
+.ybutton-label{
+  font-size: 15px;
+}
+
+
+ a, a:hover, a:active, a:visited, a:focus {
+   text-decoration:none;
+ }

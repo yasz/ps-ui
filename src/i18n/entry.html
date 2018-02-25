@@ -1,0 +1,41 @@
+<meta charset="UTF-8">
+<script src="jquery3.2.1.js"></script>
+<script>
+//  var dics;
+//  $.ajaxSetup({async : false});//关闭异步
+//  $.get('a.json', undefined,function(data) {dics=data;},"html");
+//  alert(dics);
+
+var dicStr= `
+a:小
+b:王
+c:在
+a_b:大王
+_:zzz
+ :zzz
+`;
+var dicMap = new Map();
+dicStr.split("\n").map(x=>x.split(":")).forEach(x=>dicMap.set(x[0],x[1]));
+
+//demo
+var key = "a_b_c";
+var keyArr = Array.from(key);
+
+
+var value = "";
+while(keyArr.length){
+  let findStr = keyArr.map((e,i,arr)=>arr.slice(0,arr.length-i).join('')).find(e=>dicMap.get(e));
+  if(findStr){
+    console.log("找到了"+findStr);
+    value+=dicMap.get(findStr);
+    keyArr.splice(0,findStr.length);
+  }else{
+    console.log("找不到"+keyArr.map((e,i,arr)=>arr.slice(0,arr.length-i).join('')));
+    value += keyArr.shift(); //if not translate,shift left alpha.
+  }
+  console.log(`剩余str:[${keyArr.join("")}] value:[${value}]`);
+}
+
+console.log(value.replace(/zzz/g,""));
+
+</script>
