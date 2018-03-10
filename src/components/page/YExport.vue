@@ -38,12 +38,29 @@
           title += $(this).html()+"zzz";
           lyric += $(this).attr('lyric')+"zzz";
         });
-
-        $.fileDownload("/api/unit2", {
-            httpMethod: 'GET',
-            data: {title: title, lyric: lyric}
+        lyric=lyric.replace(/\r\n/g,"\n");
+        post('/api/unit2',{title: title, lyric: lyric});
+        function post(URL, PARAMS) {
+          var temp = document.createElement("form");
+          temp.action = URL;
+          temp.method = "post";
+          temp.style.display = "none";
+          for (var x in PARAMS) {
+            var opt = document.createElement("textarea");
+            opt.name = x;
+            opt.value = PARAMS[x];
+            // alert(opt.name)
+            temp.appendChild(opt);
           }
-        )
+          document.body.appendChild(temp);
+          temp.submit();
+          return temp;
+        }
+//        $.fileDownload("/api/unit2", {
+//            httpMethod: 'POST',
+//            data: {title: title, lyric: lyric}
+//          }
+//        )
         ;
       },
       clickBtnDelete: function () {

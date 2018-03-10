@@ -15,7 +15,7 @@ export default new Router({
     },
     {
       path: '/',
-      redirect: '/page/export',
+      redirect: '/page/lyric',
       // meta: {keepAlive: true},
     }
   ]
