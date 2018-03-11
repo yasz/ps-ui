@@ -1,64 +1,61 @@
 <template>
-
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">Slide 1</div>
-      <div class="swiper-slide">Slide 2</div>
-      <div class="swiper-slide">Slide 3</div>
-      <div class="swiper-slide">Slide 4</div>
-      <div class="swiper-slide">Slide 5</div>
-      <div class="swiper-slide">Slide 6</div>
-      <div class="swiper-slide">Slide 7</div>
-      <div class="swiper-slide">Slide 8</div>
-      <div class="swiper-slide">Slide 9</div>
-      <div class="swiper-slide">Slide 10</div>
+  <div>
+    <div id="radioDiv" >
+      <label  class="radio-inline"  v-for="tmp in templatetList">
+      <input type="radio" @click="ch1($event)" name="template" :value="tmp.pptName" v-model="picked">{{tmp
+        .desc}}</label>
     </div>
-    <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
+    <div id="pickedTemplate" style="display:none">{{ picked }}</div>
+    <br><br><br><br>
+    <img id="templateIMG" width="100%">
   </div>
+
   <!--http://jqweui.com/extends-->
 </template>
-<style scoped>
-  html, body {
-    position: relative;
-    height: 100%;
-  }
-  body {
-    background: #eee;
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    color:#000;
-    margin: 0;
-    padding: 0;
-  }
-  .swiper-container {
-    width: 100%;
-    height: 100%;
-  }
-  .swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    background: #fff;
-    /* Center slide text vertically */
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-  }
-</style>
+
 <script>
+  import korea from '@/common/img/korea.png'
+  import child from '@/common/img/child.png'
+  import japan from '@/common/img/japan.png'
   export default {
+    data() {
+      return {
+        picked:'',
+        templatetList: [
+          {pptName: "korea", desc: "韩国教会", url: korea},
+          {pptName: "japan", desc: "日本教会", url: japan},
+          {pptName: "child", desc: "主日学", url: child},
+        ],
+        tabs: [
+          { text: '巴士' },
+          { text: '快车' },
+          { text: '专车' },
+          { text: '顺风车' },
+          { text: '出租车' },
+          { text: '代驾' }
+        ]
+      }
+    },
     name: 'ytemplate',
     mounted: function () {
+      // $("#radioDiv input").eq(0).prop("checked",true)
+      // $("#templateIMG").attr("src",korea)
+      $("#radioDiv input").eq(0).trigger("click")
+    },
+    methods: {
+      ch1: function (event) {
+        let value = $(event.target).val()
+        if (value == undefined) return;
+        console.log(value)
+        this.templatetList.forEach(function (item) {
+          if(value==item.pptName){
+            $("#templateIMG").attr("src", item.url)
+          }
+        })
 
+
+      }
     }
+
   }
 </script>

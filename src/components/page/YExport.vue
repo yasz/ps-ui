@@ -11,14 +11,15 @@
         </div>
 
       </div>
-      <button type="button" class="btn btn-primary ylyric-btn" @click="clickBtnExport">导出</button>
+
       <br/><br/>
       <button type="button" class="btn btn-danger ylyric-btn" @click="clickBtnDelete">删除</button>
       <br/><br/>
       <button type="button" class="btn btn-danger ylyric-btn" @click="clickBtnDeleteAll">全部删除</button>
+      <br/><br/><div>*拖动排序</div>
       <br/><br/>
-
-      <div>*拖动排序</div>
+      <!--<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>-->
+      <button type="button" class="btn btn-primary ylyric-btn" @click="clickBtnExport">导出</button>
       <!--<div class="col-md-2 col-xs-2"></div>-->
       <!--<button>↑    </button>-->
       <!--<button>↓    </button>-->
@@ -39,7 +40,9 @@
           lyric += $(this).attr('lyric')+"zzz";
         });
         lyric=lyric.replace(/\r\n/g,"\n");
-        post('/api/unit2',{title: title, lyric: lyric});
+        let templateName = $("#pickedTemplate").html()+"2.pptx";
+        console.log(templateName)
+        post('/api/unit2',{title: title, lyric: lyric,template:templateName});
         function post(URL, PARAMS) {
           var temp = document.createElement("form");
           temp.action = URL;

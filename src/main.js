@@ -9,7 +9,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'weui/dist/style/weui.min.css'
 
-import 'jquery/jquery.js';
+import 'jquery/src/jquery.js';
 import 'jquery-weui/dist/js/jquery-weui.min.js'
 import 'jquery-weui/dist/js/swiper.min.js'
 import 'jquery-file-download/src/Scripts/jquery.fileDownload.js'
