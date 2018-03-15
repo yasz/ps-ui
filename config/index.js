@@ -16,6 +16,18 @@ module.exports = {
         pathRewrite: {
           '^/api': '/api'
         }
+      },'/search': {
+        target: 'https://api.zanmeishi.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/search': '/search'
+        }
+      },'/song': {
+        target: 'https://api.zanmeishi.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/song': '/song'
+        }
       }
     },
 

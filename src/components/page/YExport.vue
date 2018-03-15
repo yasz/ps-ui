@@ -33,6 +33,7 @@
     components: {draggable},
     methods: {
       clickBtnExport: function () {
+          if($('#dragList').find('a').size()==0){alert("至少添加1首诗歌");return;}
         let title = "";
         let lyric = "";
         $("#dragList").find("a").each(function () {

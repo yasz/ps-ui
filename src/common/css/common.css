@@ -19,6 +19,10 @@
   margin-top:6px
 }
 
+.weui-cell_access{
+  font-size: 10px;
+  text-align:left;
+}
 .ybutton-icon{
   font-size: 30px;
 }

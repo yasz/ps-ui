@@ -19,6 +19,14 @@
           </form>
           <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
         </div>
+        <div class="weui-cells searchbar-result" id="searchResult" style="display: none">
+          <div class="weui-cell_access"><p>实时搜索文本</p></div>
+          <!--<div class="weui-cell weui-cell_access">-->
+          <!--<div class="weui-cell__bd weui-cell_primary">-->
+          <!--<p>实时搜索文本</p>-->
+          <!--</div>-->
+          <!--</div>-->
+        </div>
       </div>
       <div class="col-md-1 col-xs-1">
         <button type="button" class="btn btn-primary ylyric-btn " @click="clickBtnAddToExport">add</button>
@@ -65,14 +73,126 @@
     name: 'ylyric',
     methods: {
       clickBtnAddToExport: function () {
-        let listSize=$('#dragList').find('a').size();
-        if(listSize>4){alert('不能超过5首！');return;}
+        let listSize = $('#dragList').find('a').size();
+        if (listSize > 4) {
+          alert('不能超过5首！');
+          return;
+        }
         let title = $('#titleInput').val();
         let lyric = $('#lyricTextarea').val();
         $('#dragList').append(`<a class="list-group-item" lyric="${lyric}">${title}</a>`);
         $(".weui-badge").html(++listSize);
+      },
 
-      }
+      searchInit: function () {
+        /**
+         * created by yang on 15:35 2018/1/24.
+         * describtion:初始化搜索框
+         */
+        var $searchBar = $('#searchBar'),
+          $searchResult = $('#searchResult'),
+          $searchText = $('#searchText'),
+          $searchInput = $('#searchInput'),
+          $searchClear = $('#searchClear'),
+          $searchCancel = $('#searchCancel');
+
+
+        function searchTitle(kw) {
+          //describtion:成员函数，用于发起json请求到赞美诗网
+          let url = `/search/autosuggestp?k=${kw}`
+          let resultjson = ''
+          $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: "json",
+            success: function (data) {
+//              console.log(data)
+              resultjson = data
+              if (resultjson != '') {
+                let resultDom = ""
+                resultjson.song.forEach(x =>
+                  resultDom += `<div class="weui-cell_access" id="${x.id}" title="${x.name}"><p>${x.name} - ${x.artist}</p></div>`
+                )
+                $('#searchResult').empty()
+                $('#searchResult').append(resultDom)
+                $('.weui-cell_access').click(function (event) {
+                  let id = $(event.currentTarget).attr("id")
+                  let title = $(event.currentTarget).attr("title")
+                  let lyricUrl = `/song/text?song_id=${id}`
+//                  $.ajax({
+//                    url: songUrl,
+//                    type: 'GET',
+//                    dataType: "jsonp",
+//                    jsonpCallback: "success_jsonpCallback",
+//                    success: function (data) {
+//                      $("#titleInput").val(title)
+//                      $("#lyricTextarea").val(data.lyric)
+//                      $searchResult.hide();
+//                    }
+//                  })
+                  $.ajax({
+                    url: lyricUrl,
+                    type: 'GET',
+                    dataType: "json",
+                    success: function (data) {
+                      $("#titleInput").val(title)
+                      $("#lyricTextarea").val(data.lyric)
+                      $searchResult.hide();
+                    }
+                  })
+                })
+              }
+            }
+          });
+
+        }
+
+
+        function hideSearchResult() {
+          $searchResult.hide();
+          $searchInput.val('');
+        }
+
+        function cancelSearch() {
+          hideSearchResult();
+          $searchBar.removeClass('weui-search-bar_focusing');
+          $searchText.show();
+        }
+
+        $searchText.on('click', function () {
+          $searchBar.addClass('weui-search-bar_focusing');
+          $searchInput.focus();
+        });
+        $searchInput
+          .on('blur', function () {
+            if (!this.value.length) cancelSearch();
+          })
+          .on('input', function () {
+            if (this.value.length > 1) {
+              //y+here to search
+//              console.log("length:" + this.value.length)
+              searchTitle(this.value)
+              $searchResult.show();
+            } else {
+              $searchResult.hide();
+            }
+          })
+        ;
+        $searchClear.on('click', function () {
+          hideSearchResult();
+          $searchInput.focus();
+        });
+        $searchCancel.on('click', function () {
+          cancelSearch();
+          $searchInput.blur();
+        });
+
+
+      },
+    },
+
+    mounted: function () {
+      this.searchInit()
     }
   }
 </script>
