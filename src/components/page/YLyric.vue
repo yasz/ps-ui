@@ -82,6 +82,7 @@
         let lyric = $('#lyricTextarea').val();
         $('#dragList').append(`<a class="list-group-item" lyric="${lyric}">${title}</a>`);
         $(".weui-badge").html(++listSize);
+
       },
 
       searchInit: function () {
@@ -115,38 +116,11 @@
                 )
                 $('#searchResult').empty()
                 $('#searchResult').append(resultDom)
-                $('.weui-cell_access').click(function (event) {
-                  let id = $(event.currentTarget).attr("id")
-                  let title = $(event.currentTarget).attr("title")
-                  let lyricUrl = `/song/text?song_id=${id}`
-//                  $.ajax({
-//                    url: songUrl,
-//                    type: 'GET',
-//                    dataType: "jsonp",
-//                    jsonpCallback: "success_jsonpCallback",
-//                    success: function (data) {
-//                      $("#titleInput").val(title)
-//                      $("#lyricTextarea").val(data.lyric)
-//                      $searchResult.hide();
-//                    }
-//                  })
-                  $.ajax({
-                    url: lyricUrl,
-                    type: 'GET',
-                    dataType: "json",
-                    success: function (data) {
-                      $("#titleInput").val(title)
-                      $("#lyricTextarea").val(data.lyric)
-                      $searchResult.hide();
-                    }
-                  })
-                })
               }
             }
           });
 
         }
-
 
         function hideSearchResult() {
           $searchResult.hide();
@@ -189,10 +163,49 @@
 
 
       },
+
     },
 
     mounted: function () {
-      this.searchInit()
+      this.searchInit();
+      function lyricProcessor(lyric) {
+        //嘿嘿，要开始处理不规则的歌词
+        let f1 = lyric.split('\n').filter((x, i) => !x.match(/[:|：]/g))       //过滤带:或：行
+        let f2 = []       //处理超长一行特别长的
+        f1.forEach(x => {
+          if (x.length > 18) {
+              f2=f2.concat(x.split(/,|。|，|、|\./))
+          }else{
+              f2.push(x)
+          }
+        })
+
+        //处理超过连续8行
+
+        f2=f2.map(x=>x.replace(/[\d|\.|\*|；]+/g,"").replace(/\s+$/g,""))//处理每行带*
+        return f2.join('\n').replace(/(^\s*)|(\s*$)/g, "").replace(/\n\n+/g,"\n\n") //处理头、尾空行
+      }
+
+      $('.weui-cells').on('click', '.weui-cell_access', function (event) {
+        //desc:点击搜索歌词
+        console.log("hello")
+        let id = $(event.currentTarget).attr("id")
+        let title = $(event.currentTarget).attr("title")
+        let lyricUrl = `/song/text?song_id=${id}`
+
+        $.ajax({
+          url: lyricUrl,
+          type: 'GET',
+          dataType: "json",
+          success: function (data) {
+            $("#titleInput").val(title)
+            //正则表达式处理
+            let lyric = lyricProcessor(data.lyric)
+            $("#lyricTextarea").val(lyric)
+            $('#searchResult').hide();
+          }
+        })
+      })
     }
   }
 </script>

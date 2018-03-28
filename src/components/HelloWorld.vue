@@ -1,17 +1,16 @@
 <template>
-
   <div>
-
     <YLyric ref="ref1" v-show="showLyric"></YLyric>
     <YTemplate ref="ref2" v-show="showTemplate"></YTemplate>
     <YExport ref="ref3" v-show="showExport"></YExport>
     <YAboutme ref="ref4" v-show="showAboutme"></YAboutme>
     <div class="weui-tabbar">
       <span class="weui-badge" style="position: absolute;top: -.4em;right: 30%;">0</span>
-      <BottomTab @click.native="clickBtnLyric" :text="'歌词'"></BottomTab>
-      <BottomTab @click.native="clickBtnTemplate" :text="'模板'"></BottomTab>
-      <BottomTab @click.native="clickBtnExport" :text="'导出'"></BottomTab>
-      <BottomTab @click.native="clickBtnAboutme" :text="'我'"></BottomTab>
+      <BottomTab v-on:message="handleRouter" :url="'/page/lyric'" :text="'歌词'"></BottomTab>
+      <BottomTab v-on:message="handleRouter" :url="'/page/template'" :text="'模板'"></BottomTab>
+      <!--@click.native="clickBtnTemplate"-->
+      <BottomTab v-on:message="handleRouter" :url="'/page/export'" :text="'导出'"></BottomTab>
+      <BottomTab v-on:message="handleRouter" :url="'/page/aboutme'" :text="'我'"></BottomTab>
     </div>
   </div>
 </template>
@@ -32,30 +31,16 @@
         this.routeUpdate();
     },
     methods: {
-      clickBtnLyric:function () {
-        this.$router.push('/page/lyric')
-        },
-      clickBtnTemplate:function(){
-        this.$router.push('/page/template')
-      },
-      clickBtnExport:function(){
-        this.$router.push('/page/export')
-      },
-      clickBtnAboutme:function(){
-        this.$router.push('/page/aboutme')
-      },
-
+      handleRouter:function(url){this.$router.push(url)},
       routeUpdate: function () {
         /**
          * created by yang on 15:35 2018/1/24.
          * describtion:url修改后的刷新事件
          */
-
         this.showLyric = false;
         this.showTemplate = false;
         this.showExport = false;
         this.showAboutme = false;
-
         $(".weui-tabbar__item").find("*").removeClass("ybutton-icon-active")
         switch (this.$route.params.pagename) {
           case 'lyric':
@@ -77,7 +62,6 @@
         var iconName = ['file', 'bars', 'file-powerpoint-o', 'heart-o'];
         $('.weui-tabbar__icon').each(function (i) {
           $(this).addClass('fa fa-fw fa-' + iconName[i]);
-
         })
       }
     },

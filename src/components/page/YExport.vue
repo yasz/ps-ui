@@ -31,6 +31,19 @@
   import draggable from 'vuedraggable'
   export default {
     components: {draggable},
+    mounted:function(){
+        //点击导出列表加粗效果
+      $('.list-group').on("click",".list-group-item",function (event) {
+        {
+          console.log($(event.currentTarget).html()+$(event.currentTarget).hasClass("active"))
+          if ($(event.currentTarget).hasClass("active")) {
+            $(event.currentTarget).removeClass("active")
+          } else {
+            $(event.currentTarget).addClass("active")
+          }
+        }
+      })
+    },
     methods: {
       clickBtnExport: function () {
           if($('#dragList').find('a').size()==0){alert("至少添加1首诗歌");return;}
@@ -68,7 +81,7 @@
         ;
       },
       clickBtnDelete: function () {
-
+        $("#dragList .active").remove();
       },
       clickBtnDeleteAll: function () {
         $("#dragList").empty();
