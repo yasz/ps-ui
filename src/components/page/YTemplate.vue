@@ -17,6 +17,9 @@
   import korea from '@/common/img/korea.png'
   import child from '@/common/img/child.png'
   import japan from '@/common/img/japan.png'
+  import zanmeishi from '@/common/img/zanmeishi.png'
+  import marry from '@/common/img/marry.png'
+  
   export default {
     data() {
       return {
@@ -25,6 +28,8 @@
           {pptName: "korea", desc: "韩国教会", url: korea},
           {pptName: "japan", desc: "日本教会", url: japan},
           {pptName: "child", desc: "主日学", url: child},
+		  {pptName: "zanmeishi", desc: "zms", url: zanmeishi},
+		  {pptName: "marry", desc: "婚礼", url: marry},
         ],
         tabs: [
           { text: '巴士' },
