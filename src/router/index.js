@@ -33,18 +33,6 @@ const routes = [
     path: '/export',
     component: YExport,
     // meta: {keepAlive: true},
-  },
-  {
-    path: '/test',
-    component: {
-      template: `<h1>测试</h1>`
-    }
-    // meta: {keepAlive: true},
-  }, {
-    path: '/test2',
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../pages/About.vue")
-    // meta: {keepAlive: true},
   }
 ]
 const router = new VueRouter({
