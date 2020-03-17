@@ -3,10 +3,10 @@
 import Vue from 'vue'
 import router from './router'
 import App from './App'
+
 import 'font-awesome/css/font-awesome.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'weui/dist/style/weui.min.css'
-import 'jquery/src/jquery.js';
 Vue.config.productionTip = false
 
 // import store from '@/common/shareStore'
