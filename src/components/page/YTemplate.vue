@@ -1,66 +1,55 @@
 <template>
   <div>
-    <div id="radioDiv" >
-      <label  class="radio-inline"  v-for="tmp in templatetList">
-      <input type="radio" @click="ch1($event)" name="template" :value="tmp.pptName" v-model="picked">{{tmp
-        .desc}}</label>
+    <div id="radioDiv">
+      <label class="radio-inline" v-for="(value,key) in list">
+        <input type="radio" @click="changeTemplate($event)" :value="key" v-model="pickedTemplate" />
+        {{value.desc}}
+      </label>
     </div>
-    <div id="pickedTemplate" style="display:none">{{ picked }}</div>
-    <br><br><br><br>
-    <img id="templateIMG" width="100%">
+    <!-- <div id="pickedTemplate" style="display:none">{{ template }}</div> -->
+    <br />
+    <br />
+    <br />
+    <br />
+    <img :src="this.list[pickedTemplate].url" width="100%" />
   </div>
 
   <!--http://jqweui.com/extends-->
 </template>
 
 <script>
-  import korea from '@/common/img/korea.png'
-  import child from '@/common/img/child.png'
-  import japan from '@/common/img/japan.png'
-  import zanmeishi from '@/common/img/zanmeishi.png'
-  import marry from '@/common/img/marry.png'
-  
-  export default {
-    data() {
-      return {
-        picked:'',
-        templatetList: [
-          {pptName: "korea", desc: "韩国教会", url: korea},
-          {pptName: "japan", desc: "日本教会", url: japan},
-          {pptName: "child", desc: "主日学", url: child},
-		  {pptName: "zanmeishi", desc: "zms", url: zanmeishi},
-		  {pptName: "marry", desc: "婚礼", url: marry},
-        ],
-        tabs: [
-          { text: '巴士' },
-          { text: '快车' },
-          { text: '专车' },
-          { text: '顺风车' },
-          { text: '出租车' },
-          { text: '代驾' }
-        ]
-      }
-    },
-    name: 'ytemplate',
-    mounted: function () {
-      // $("#radioDiv input").eq(0).prop("checked",true)
-      // $("#templateIMG").attr("src",korea)
-      $("#radioDiv input").eq(0).trigger("click")
-    },
-    methods: {
-      ch1: function (event) {
-        let value = $(event.target).val()
-        if (value == undefined) return;
-        console.log(value)
-        this.templatetList.forEach(function (item) {
-          if(value==item.pptName){
-            $("#templateIMG").attr("src", item.url)
-          }
-        })
-
-
+import korea from '@/common/img/korea.png'
+import child from '@/common/img/child.png'
+import japan from '@/common/img/japan.png'
+import zanmeishi from '@/common/img/zanmeishi.png'
+import marry from '@/common/img/marry.png'
+import { mapState, mapMutations } from 'vuex'
+export default {
+  name: 'ytemplate',
+  computed: {
+    ...mapState(['templateName'])
+  },
+  data() {
+    return {
+      pickedTemplate: '',
+      list: {
+        korea: { desc: '韩国教会', url: korea },
+        japan: { desc: '日本教会', url: japan },
+        child: { desc: '主日学', url: child },
+        zanmeishi: { desc: 'zms', url: zanmeishi },
+        marry: { desc: '婚礼', url: marry }
       }
     }
+  },
 
+  created: function() {
+    this.pickedTemplate = this.templateName
+  },
+  methods: {
+    ...mapMutations(['setTemplateName']),
+    changeTemplate: function(event) {
+      this.setTemplateName(event.target.value)
+    }
   }
+}
 </script>

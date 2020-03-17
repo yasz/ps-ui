@@ -1,92 +1,117 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-
       <div class="col-md-12 col-xs-12">
-
         <div class="list-group">
-          <draggable id="dragList">
-
+          <draggable dragClass="active" @remove="remove" @end="end">
+            <li
+              class="list-group-item"
+              v-for="(ele,i) in songs"
+              :key="i"
+              v-model="songs"
+              :lyric="ele.lyric"
+            >{{ele.title}}</li>
           </draggable>
         </div>
-
       </div>
+      <draggable v-model="trashZone" class="dropzone trashzone" :options="trashOptions">
+        <div slot="footer" class="footer">拖动到这里删除</div>
+      </draggable>
 
-      <br/><br/>
-      <button type="button" class="btn btn-danger ylyric-btn" @click="clickBtnDelete">删除</button>
-      <br/><br/>
-      <button type="button" class="btn btn-danger ylyric-btn" @click="clickBtnDeleteAll">全部删除</button>
-      <br/><br/><div>*拖动排序</div>
-      <br/><br/>
-      <!--<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>-->
-      <button type="button" class="btn btn-primary ylyric-btn" @click="clickBtnExport">导出</button>
-      <!--<div class="col-md-2 col-xs-2"></div>-->
-      <!--<button>↑    </button>-->
-      <!--<button>↓    </button>-->
+      <div id="footDiv">
+        <button type="button" class="btn btn-danger ylyric-btn" @click="clear">全部删除</button>
+        <button type="button" class="btn btn-primary ylyric-btn" @click="clickBtnExport">导出</button>
+      </div>
     </div>
-
   </div>
 </template>
 <script>
-  import draggable from 'vuedraggable'
-  export default {
-    components: {draggable},
-    mounted:function(){
-        //点击导出列表加粗效果
-      $('.list-group').on("click",".list-group-item",function (event) {
-        {
-          console.log($(event.currentTarget).html()+$(event.currentTarget).hasClass("active"))
-          if ($(event.currentTarget).hasClass("active")) {
-            $(event.currentTarget).removeClass("active")
-          } else {
-            $(event.currentTarget).addClass("active")
-          }
+import draggable from 'vuedraggable'
+import { mapState, mapMutations } from 'vuex'
+export default {
+  components: { draggable },
+  computed: {
+    ...mapState(['songs', 'templateName'])
+  },
+  data() {
+    return {
+      trashZone: [],
+      trashOptions: {
+        group: {
+          name: 'trash',
+          draggable: '.dropitem',
+          put: () => true,
+          pull: false
         }
-      })
-    },
-    methods: {
-      clickBtnExport: function () {
-          if($('#dragList').find('a').size()==0){alert("至少添加1首诗歌");return;}
-        let title = "";
-        let lyric = "";
-        $("#dragList").find("a").each(function () {
-          title += $(this).html()+"zzz";
-          lyric += $(this).attr('lyric')+"zzz";
-        });
-        lyric=lyric.replace(/\r\n/g,"\n");
-        let templateName = $("#pickedTemplate").html()+"2.pptx";
-        console.log(templateName)
-        post('/api/unit2',{title: title, lyric: lyric,template:templateName});
-        function post(URL, PARAMS) {
-          var temp = document.createElement("form");
-          temp.action = URL;
-          temp.method = "post";
-          temp.style.display = "none";
-          for (var x in PARAMS) {
-            var opt = document.createElement("textarea");
-            opt.name = x;
-            opt.value = PARAMS[x];
-            // alert(opt.name)
-            temp.appendChild(opt);
-          }
-          document.body.appendChild(temp);
-          temp.submit();
-          return temp;
-        }
-//        $.fileDownload("/api/unit2", {
-//            httpMethod: 'POST',
-//            data: {title: title, lyric: lyric}
-//          }
-//        )
-        ;
-      },
-      clickBtnDelete: function () {
-        $("#dragList .active").remove();
-      },
-      clickBtnDeleteAll: function () {
-        $("#dragList").empty();
-        $(".weui-badge").html(0);
       }
     }
+  },
+
+  methods: {
+    ...mapMutations(['clear', 'clearByTitle']),
+    clickBtnExport: function() {
+      if (this.songs.length == 0) {
+        alert('至少添加1首诗歌')
+        return
+      }
+      let title = ''
+      let lyric = ''
+      this.songs.forEach(song => {
+        title += song.title + 'zzz'
+        lyric += song.lyric + 'zzz'
+      })
+      // lyric = lyric.replace(/\r\n/g, '\n')
+      let templateName = this.templateName + '2.pptx'
+      post('/api/unit2', { title: title, lyric: lyric, template: templateName })
+      function post(URL, PARAMS) {
+        var temp = document.createElement('form')
+        temp.action = URL
+        temp.method = 'post'
+        temp.style.display = 'none'
+        for (var x in PARAMS) {
+          var opt = document.createElement('textarea')
+          opt.name = x
+          opt.value = PARAMS[x]
+          // alert(opt.name)
+          temp.appendChild(opt)
+        }
+        document.body.appendChild(temp)
+        temp.submit()
+        return temp
+      }
+    },
+    remove(event) {
+      // debugger
+      console.log('reomve', event)
+      this.clearByTitle(event.item.innerHTML)
+    },
+
+    end(event) {
+      console.log('end', event)
+    }
   }
+}
 </script>
+<style scoped>
+.trashzone .footer {
+  border: 3px dotted red;
+  min-height: 100px;
+  width: 100%;
+  display: block;
+  position: absolute;
+  align-content: center;
+  bottom: 400px;
+}
+
+.trashzone .dropitem + .footer {
+  background: red;
+  color: white;
+}
+#footDiv {
+  bottom: 300px;
+  display: block;
+  width: 100%;
+  align-content: center;
+  position: absolute;
+}
+</style>

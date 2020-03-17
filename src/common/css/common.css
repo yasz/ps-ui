@@ -1,5 +1,5 @@
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -10,37 +10,39 @@
   color: black;
 }
 
-.ylyric-label{
-  padding-top:6px;
-  padding-right:30px;
+.ylyric-label {
+  padding-top: 6px;
+  padding-right: 30px;
 }
 
-.ylyric-btn{
-  margin-top:6px
+.ylyric-btn {
+  margin-top: 6px;
 }
 
-.weui-cell_access{
+.weui-cell_access {
   font-size: 10px;
-  text-align:left;
+  text-align: left;
 }
-.ybutton-icon{
+.ybutton-icon {
   font-size: 30px;
 }
 
-.ybutton-icon-active{
-  color:#4876FF;
+.ybutton-icon-active {
+  color: #4876ff;
 }
-
 .btn-primary {
   color: #fff;
-  background-color: #4876FF;
-  border-color: #4876FF;
+  background-color: #4876ff;
+  border-color: #4876ff;
 }
-.ybutton-label{
+.ybutton-label {
   font-size: 15px;
 }
 
-
- a, a:hover, a:active, a:visited, a:focus {
-   text-decoration:none;
- }
+a,
+a:hover,
+a:active,
+a:visited,
+a:focus {
+  text-decoration: none;
+}
