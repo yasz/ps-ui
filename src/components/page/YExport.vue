@@ -3,12 +3,11 @@
     <div class="row">
       <div class="col-md-12 col-xs-12">
         <div class="list-group">
-          <draggable dragClass="active" @remove="remove" @end="end">
+          <draggable dragClass="active" v-model="songs" @remove="remove" @end="end">
             <li
               class="list-group-item"
               v-for="(ele,i) in songs"
               :key="i"
-              v-model="songs"
               :lyric="ele.lyric"
             >{{ele.title}}</li>
           </draggable>
