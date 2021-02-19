@@ -4,14 +4,13 @@
       ref="searchRef"
       class="searchStyle"
       v-model="kw"
-      show-action
       placeholder="首拼(如qyed~奇异恩典)"
-      @input="onSearch()"
+      @input="onSearch"
       @confirm="onConfirm"
     >
-      <template #action>
+      <!-- <template #action>
         <van-button type="primary" @click="addToExport">添加</van-button>
-      </template>
+      </template> -->
     </van-search>
 
     <van-popup
@@ -121,6 +120,7 @@ The hour I first believed.`,
 
     onConfirm: function (value) {
       this.addToExport()
+      this.onCancel()
     },
     onChange: async function (picker, value) {
       let id = value.slice(value.indexOf('|') + 1)
@@ -143,6 +143,7 @@ The hour I first believed.`,
     },
     onCancel: function () {
       this.showPop = false
+      this.kw = ''
     },
     onSearch: async function () {
       const res = await fetch(`/search/autosuggest/?k=${this.kw}`)
@@ -185,17 +186,8 @@ The hour I first believed.`,
       let filename = response.headers
         .get('content-disposition')
         .split(/"(.*)"/gi)[1]
-      // let file = new File([blob], filename, {
-      //   type:
-      //     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      // })
 
       saveAs(blob, filename)
-      // let exportUrl = URL.createObjectURL(file)
-      // let a = document.createElement('a')
-      // a.href = exportUrl
-      // a.download = filename
-      // a.click()
 
       function getFormData(object) {
         const formData = new FormData()
@@ -236,14 +228,14 @@ The hour I first believed.`,
   },
 
   mounted: function () {
-    // let s = this.$refs.searchRef
-    // s.querySelector('input').focus()
+    let s = this.$refs.searchRef
+    s.querySelector('input').focus()
   },
 }
 </script>
 <style>
 .searchStyle {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
 }
 .trash {
@@ -254,5 +246,9 @@ The hour I first believed.`,
   position: fixed;
   width: 100%;
   bottom: 15%;
+}
+input,
+textarea {
+  font-size: 16px !important;
 }
 </style>
