@@ -1,47 +1,48 @@
 <template>
   <div id="app">
-    <div>
+    <div id="content">
       <router-view></router-view>
     </div>
-    <div class="weui-tabbar">
-      <span
-        class="weui-badge"
-        style="position: absolute; top: -0.4em; right: 30%;"
-        >{{ songs.length }}</span
-      >
-      <!-- 这个是红色的数量标 -->
-      <BottomTab :icon="'fa-file'" :url="'/lyric'" :text="'歌词'"></BottomTab>
-      <BottomTab
-        :icon="'fa-bars'"
-        :url="'/template'"
-        :text="'模板'"
-      ></BottomTab>
-      <BottomTab
-        :icon="'fa-file-powerpoint-o'"
-        :url="'/export'"
-        :text="'导出'"
-      ></BottomTab>
-      <BottomTab :icon="'fa-heart-o'" :url="'/about'" :text="'我'"></BottomTab>
-    </div>
+    <van-grid id="gridbar" clickable>
+      <van-grid-item icon="music-o" text="beat" to="/beat" />
+      <van-grid-item icon="search" text="ppt-lyric" to="/lyric" />
+      <van-grid-item icon="eye-o" text="ppt-tmplate" to="/template" />
+      <van-grid-item icon="good-job-o" text="donate" to="/donate" />
+    </van-grid>
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import BottomTab from "@/components/basic/BottomTab.vue";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+
 export default Vue.extend({
-  name: "app",
-  computed: {
-    ...mapState(["songs"]),
+  name: 'app',
+  props: {
+    ...mapState(['songs']),
   },
-  components: { BottomTab },
-});
+  mounted: function () {
+    // document.addEventListener(
+    //   'touchstart',
+    //   (event) => {
+    //     if (event.touches.length > 1) {
+    //       console.log('zoom plz stahp')
+    //       event.preventDefault()
+    //       event.stopPropagation() // maybe useless
+    //     }
+    //   },
+    //   { passive: false }
+    // )
+  },
+})
 </script>
 <style scoped>
-@import "./common/css/common.css";
-.weui-tabbar {
-  height: 60px;
-  position: absolute;
-  bottom: 0px;
+@import './common/css/common.css';
+#gridbar {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+#content {
+  padding-bottom: 125px;
 }
 </style>

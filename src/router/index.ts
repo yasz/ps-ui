@@ -5,38 +5,44 @@ import YExport from "@/components/page/YExport.vue";
 import YLyric from "@/components/page/YLyric.vue";
 import YTemplate from "@/components/page/YTemplate.vue";
 import YAboutme from "@/components/page/YAboutme.vue";
+import YDonate from "@/components/page/YDonate.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    component: YLyric,
+    component: YLyric
   },
   {
     path: "/lyric",
-    component: YLyric,
+    component: YLyric
   },
   {
-    path: "/about",
-    component: YAboutme,
+    path: "/beat",
+    component: YAboutme
     // meta: {keepAlive: true},
   },
   {
     path: "/template",
-    component: YTemplate,
+    component: YTemplate
     // meta: {keepAlive: true},
   },
   {
     path: "/export",
-    component: YExport,
+    component: YExport
     // meta: {keepAlive: true},
   },
+  {
+    path: "/donate",
+    component: YDonate
+    // meta: {keepAlive: true},
+  }
 ];
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes,
+  routes
 });
 
 export default router;

@@ -4,9 +4,9 @@ import Vue from "vue";
 import router from "./router";
 import App from "./App.vue";
 
-// import 'font-awesome/css/font-awesome.css';
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'weui/dist/style/weui.min.css'
+import Vant from "vant";
+import "vant/lib/index.css";
+Vue.use(Vant);
 Vue.config.productionTip = false;
 
 import Vuex, { StoreOptions, MutationTree } from "vuex";
@@ -24,9 +24,17 @@ const store = new Vuex.Store({
     songs: <any>[]
   },
   mutations: {
+    updateSongs(state, value) {
+      debugger;
+      if (!value.length) {
+        return;
+      }
+      state.songs = value;
+    },
     setTemplateName(state, value) {
       state.templateName = value;
     },
+
     push(state, ele: any) {
       state.songs.push(ele);
     },
@@ -34,7 +42,10 @@ const store = new Vuex.Store({
       state.songs = [];
     },
     clearByTitle(state, title) {
-      state.songs.splice(state.songs.findIndex((e: any) => e.title == title));
+      state.songs.splice(
+        state.songs.findIndex((e: any) => e.title == title),
+        1
+      );
     }
   },
   actions: {}

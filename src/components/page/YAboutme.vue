@@ -13,7 +13,7 @@
       <div id="control">
         <button id="btnPlay" v-show="!isPlay" @click="play">
           <svg
-            style="width: 32px; height: 32px; vertical-align: middle;"
+            style="width: 32px; height: 32px; vertical-align: middle"
             viewBox="0 0 1024 1024"
             version="1.1"
           >
@@ -24,7 +24,7 @@
         </button>
         <button id="btnStop" v-show="isPlay" @click="stop">
           <svg
-            style="width: 32px; height: 32px; vertical-align: middle;"
+            style="width: 32px; height: 32px; vertical-align: middle"
             viewBox="0 0 1024 1024"
             version="1.1"
           >
@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
 export default Vue.extend({
   data() {
@@ -61,68 +61,68 @@ export default Vue.extend({
       isPlay: false,
       sounds: [
         {
-          name: "kick",
-          logo: "🦶",
-          soundPath: "/sounds/bass_drum.wav"
+          name: 'kick',
+          logo: '🦶',
+          soundPath: '/sounds/bass_drum.wav',
         },
         {
-          name: "snare",
-          logo: "🥁",
-          soundPath: "/sounds/snare_drum.wav"
+          name: 'snare',
+          logo: '🥁',
+          soundPath: '/sounds/snare_drum.wav',
         },
         {
-          name: "clap",
-          logo: "👏",
-          soundPath: "/sounds/hand_clap.wav"
+          name: 'clap',
+          logo: '👏',
+          soundPath: '/sounds/hand_clap.wav',
         },
         {
-          name: "hat",
-          logo: "🎩",
-          soundPath: "/sounds/maracas.wav"
-        }
+          name: 'hat',
+          logo: '🎩',
+          soundPath: '/sounds/maracas.wav',
+        },
       ] as any[],
 
       // soundBuffers: [],
       beat: {
         BPM: 60,
         set interval(val) {
-          this.BPM = 60000 / (4 * val);
+          this.BPM = 60000 / (4 * val)
         },
         get interval() {
-          return 60000 / (4 * this.BPM);
-        }
+          return 60000 / (4 * this.BPM)
+        },
       },
       BEATS: 8,
       activeStatus: new Array(),
       loopStatus: new Array(),
 
-      currentBeat: 0
-    };
+      currentBeat: 0,
+    }
   },
   props: {},
   methods: {
     onclick(i: any, j: any) {
-      this.$set(this.activeStatus[i], j, !this.activeStatus[i][j]);
+      this.$set(this.activeStatus[i], j, !this.activeStatus[i][j])
     },
     reset() {
       this.sounds.forEach((e, i) => {
-        [...Array(this.BEATS).keys()].forEach(j => {
-          this.$set(this.activeStatus[i], j, false);
-        });
-      });
+        ;[...Array(this.BEATS).keys()].forEach((j) => {
+          this.$set(this.activeStatus[i], j, false)
+        })
+      })
     },
     play() {
-      this.isPlay = true;
-      let component = this;
-      var start = Date.now();
-      var expected = Date.now() + this.beat.interval;
+      this.isPlay = true
+      let component = this
+      var start = Date.now()
+      var expected = Date.now() + this.beat.interval
       let recur = () => {
-        var dt = Date.now() - expected;
+        var dt = Date.now() - expected
         if (!this.isPlay) {
-          return;
+          return
         }
         if (this.currentBeat >= this.BEATS) {
-          this.currentBeat -= this.BEATS;
+          this.currentBeat -= this.BEATS
         }
 
         //将上一步的样式清空掉
@@ -131,45 +131,45 @@ export default Vue.extend({
             this.loopStatus[i],
             this.currentBeat - 1 >= 0 ? this.currentBeat - 1 : this.BEATS - 1,
             false
-          );
-          this.$set(this.loopStatus[i], this.currentBeat, true);
+          )
+          this.$set(this.loopStatus[i], this.currentBeat, true)
           if (this.activeStatus[i][this.currentBeat]) {
             try {
-              const source = this.audioCtx.createBufferSource();
-              source.buffer = this.sounds[i].buffer;
-              source.connect(this.audioCtx.destination);
-              source.start();
+              const source = this.audioCtx.createBufferSource()
+              source.buffer = this.sounds[i].buffer
+              source.connect(this.audioCtx.destination)
+              source.start()
             } catch (e) {
-              alert(e.message);
+              alert(e.message)
               // Fallback method
-              new Audio(e.soundPath).play();
+              new Audio(e.soundPath).play()
             }
           }
-        });
-        this.currentBeat++;
-        expected += this.beat.interval;
-        setTimeout(recur, Math.max(0, this.beat.interval - dt));
-      };
-      setTimeout(recur, this.beat.interval);
+        })
+        this.currentBeat++
+        expected += this.beat.interval
+        setTimeout(recur, Math.max(0, this.beat.interval - dt))
+      }
+      setTimeout(recur, this.beat.interval)
     },
     stop() {
-      this.isPlay = false;
-      this.currentBeat = 0;
+      this.isPlay = false
+      this.currentBeat = 0
       this.loopStatus = new Array(this.sounds.length)
         .fill(false)
-        .map(() => new Array(this.BEATS).fill(false));
-    }
+        .map(() => new Array(this.BEATS).fill(false))
+    },
   },
   async mounted() {
     //缓存声音文件
 
     await this.sounds.forEach(async (e, i) => {
-      let res = await fetch(e.soundPath, { method: "GET" });
-      let ab = await res.arrayBuffer();
-      await this.audioCtx.decodeAudioData(ab, buffer => {
-        this.sounds[i].buffer = buffer;
-      });
-    });
+      let res = await fetch(e.soundPath, { method: 'GET' })
+      let ab = await res.arrayBuffer()
+      await this.audioCtx.decodeAudioData(ab, (buffer) => {
+        this.sounds[i].buffer = buffer
+      })
+    })
   },
   created() {
     // document.addEventListener(
@@ -181,23 +181,22 @@ export default Vue.extend({
     //   { passive: false }
     // );
     this.audioCtx = new (window.AudioContext ||
-      (<any>window).webkitAudioContext)();
+      (<any>window).webkitAudioContext)()
 
     this.activeStatus = new Array(this.sounds.length)
       .fill(false)
-      .map(() => new Array(this.BEATS).fill(false));
+      .map(() => new Array(this.BEATS).fill(false))
     this.loopStatus = new Array(this.sounds.length)
       .fill(false)
-      .map(() => new Array(this.BEATS).fill(false));
-  }
-});
+      .map(() => new Array(this.BEATS).fill(false))
+  },
+})
 </script>
 <style scoped>
-/* #bpm {
-  position: absolute;
-  top: 290px;
-  left: 300px;
-} */
+#bpm {
+  top: 5px;
+  text-align: center;
+}
 #control button {
   border-radius: 3ch;
   background-color: white;
@@ -210,7 +209,6 @@ export default Vue.extend({
 #grid {
   text-align: center;
   padding-top: 100px;
-  height: 1000px;
   max-height: 100%;
   /* background: blue; */
 }

@@ -1,8 +1,14 @@
-$<template>
+<template>
   <div>
-    <div id="radioDiv">
+    <br/></br>
+    <div id="radioDiv" style="text-align: center">
       <label class="radio-inline" v-for="(value, key) in list" :key="key">
-        <input type="radio" @click="changeTemplate($event)" :value="key" v-model="pickedTemplate" />
+        <input
+          type="radio"
+          @click="changeTemplate($event)"
+          :value="key"
+          v-model="pickedTemplate"
+        />
         {{ value.desc }}
       </label>
     </div>
@@ -13,39 +19,37 @@ $<template>
     <br />
     <img :src="this.list[pickedTemplate].url" width="100%" />
   </div>
-
-  <!--http://jqweui.com/extends-->
 </template>
 
 <script lang="ts">
 //@ts-nocheck
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex'
 export default {
-  name: "ytemplate",
+  name: 'ytemplate',
   computed: {
-    ...mapState(["templateName"])
+    ...mapState(['templateName']),
   },
   data() {
     return {
-      pickedTemplate: "",
+      pickedTemplate: '',
       list: {
-        korea: { desc: "韩国教会", url: "/img/korea.png" },
-        japan: { desc: "日本教会", url: "/img/child.png" },
-        child: { desc: "主日学", url: "/img/japan.png" },
-        zanmeishi: { desc: "zms", url: "/img/zanmeishi.png" },
-        marry: { desc: "婚礼", url: "/img/marry.png" }
-      }
-    };
+        korea: { desc: '韩国教会', url: '/img/korea.png' },
+        japan: { desc: '日本教会', url: '/img/child.png' },
+        child: { desc: '主日学', url: '/img/japan.png' },
+        zanmeishi: { desc: 'zms', url: '/img/zanmeishi.png' },
+        marry: { desc: '婚礼', url: '/img/marry.png' },
+      },
+    }
   },
 
-  created: function() {
-    this.pickedTemplate = this.templateName;
+  created: function () {
+    this.pickedTemplate = this.templateName
   },
   methods: {
-    ...mapMutations(["setTemplateName"]),
-    changeTemplate: function(event: any) {
-      this.setTemplateName(event.target.value);
-    }
-  }
-};
+    ...mapMutations(['setTemplateName']),
+    changeTemplate: function (event: any) {
+      this.setTemplateName(event.target.value)
+    },
+  },
+}
 </script>
