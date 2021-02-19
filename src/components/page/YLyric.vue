@@ -6,12 +6,29 @@
       v-model="kw"
       show-action
       placeholder="首拼(如qyed~奇异恩典)"
-      @search="onSearch"
+      @input="onSearch()"
+      @confirm="onConfirm"
     >
       <template #action>
         <van-button type="primary" @click="addToExport">添加</van-button>
       </template>
     </van-search>
+
+    <van-popup
+      v-model="showPop"
+      position="top"
+      default-index="2"
+      style="height: 60%"
+    >
+      <van-picker
+        show-toolbar
+        :title="kw"
+        :columns="columns"
+        @confirm="onConfirm"
+        @change="onChange"
+        @cancel="onCancel"
+      />
+    </van-popup>
     <div>
       <van-field v-model="title" label="标题" label-width="3.1em"> </van-field>
       <van-field
@@ -45,24 +62,19 @@
         </draggable>
       </van-cell-group>
     </div>
-    <div style="position: fixed; width: 100%; bottom: 15%">
-      <!-- <van-icon class="trash" name="delete" size="40" /> -->
-      <!-- <div slot="footer" class="footer">拖动到这里删除</div> -->
-
-      <div style="width: 250px; margin: 0 auto">
-        <draggable v-model="trashZone" class="trash" :options="trashOptions">
-          <van-button
-            type="primary"
-            style="postition: absolute"
-            color="linear-gradient(to right, #ff6034, #ee0a24)"
-            @click="clear"
-          >
-            清空列表
-          </van-button>
-        </draggable>
-        &nbsp
-        <van-button type="primary" @click="exportPPT"> 导出PPT </van-button>
-      </div>
+    <div class="recycle">
+      <draggable v-model="trashZone" class="trash" :options="trashOptions">
+        <van-icon name="delete" size="40" />
+      </draggable>
+      <van-button
+        type="primary"
+        style="margin: 0 20px 0 110px"
+        color="linear-gradient(to right, #ff6034, #ee0a24)"
+        @click="clear"
+      >
+        清空列表
+      </van-button>
+      <van-button type="primary" @click="exportPPT"> 导出PPT </van-button>
     </div>
   </div>
 </template>
@@ -70,13 +82,17 @@
 //@ts-nocheck
 import { mapState, mapMutations } from 'vuex'
 import draggable from 'vuedraggable'
+import { saveAs } from 'file-saver'
+import { Toast } from 'vant'
 export default {
   name: 'ylyric',
   components: { draggable },
   data() {
     return {
       kw: '',
+      showPop: false,
       title: 'Amazing grace',
+      columns: [],
       lyric: `Amazing Grace, how sweet the sound
 That saved a wretch like me.
 I once was lost but now I'm found,
@@ -102,14 +118,42 @@ The hour I first believed.`,
 
   methods: {
     ...mapMutations(['push', 'clear', 'clearByTitle']),
+
+    onConfirm: function (value) {
+      this.addToExport()
+    },
+    onChange: async function (picker, value) {
+      let id = value.slice(value.indexOf('|') + 1)
+      let title = value.slice(0, value.indexOf('--'))
+
+      const res = await fetch(`/song/${id}.html`)
+      let text = await res.text()
+      const parser = new DOMParser()
+      const htmlDocument = parser.parseFromString(text, 'text/html')
+      let lyric = 'no lyric'
+      try {
+        lyric = htmlDocument.documentElement.querySelector('#lyric_editor')
+          .innerText
+      } catch (err: any) {
+        Toast(lyric)
+      }
+      Toast(`~~${title}~~\n${this.lyricProcessor(lyric)}`)
+      this.lyric = lyric
+      this.title = title
+    },
+    onCancel: function () {
+      this.showPop = false
+    },
     onSearch: async function () {
       const res = await fetch(`/search/autosuggest/?k=${this.kw}`)
-      const rs = await res.text()
-      // rs.song.forEach(
-      //   (x) =>
-      //     (resultDom += `<div class="weui-cell_access" id="${x.id}" title="${x.name}">${x.name} - ${x.artist}</div>`)
-      // )
-      console.log(rs)
+      const rs = await res.json()
+      if (!rs.song) return
+      this.columns = []
+      this.showPop = true
+      rs.song.forEach((x) =>
+        this.columns.push(`${x.name}--${x.artist}|${x.id}`)
+      )
+      this.onChange(null, this.columns[0])
     },
     exportPPT: async function () {
       if (this.songs.length == 0) {
@@ -141,12 +185,18 @@ The hour I first believed.`,
       let filename = response.headers
         .get('content-disposition')
         .split(/"(.*)"/gi)[1]
-      let file = new File([blob], filename)
-      let exportUrl = URL.createObjectURL(file)
-      let a = document.createElement('a')
-      a.href = exportUrl
-      a.download = filename
-      a.click()
+      // let file = new File([blob], filename, {
+      //   type:
+      //     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      // })
+
+      saveAs(blob, filename)
+      // let exportUrl = URL.createObjectURL(file)
+      // let a = document.createElement('a')
+      // a.href = exportUrl
+      // a.download = filename
+      // a.click()
+
       function getFormData(object) {
         const formData = new FormData()
         Object.keys(object).forEach((key) => formData.append(key, object[key]))
@@ -197,7 +247,12 @@ The hour I first believed.`,
   margin: 0 auto;
 }
 .trash {
-  left: 55%;
+  left: 15%;
   position: absolute;
+}
+.recycle {
+  position: fixed;
+  width: 100%;
+  bottom: 15%;
 }
 </style>

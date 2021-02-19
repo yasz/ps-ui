@@ -2,6 +2,35 @@
 # yarn lockfile v1
 
 
+"@algolia/autocomplete-core@1.0.0-alpha.43":
+  version "1.0.0-alpha.43"
+  resolved "https://registry.npm.taobao.org/@algolia/autocomplete-core/download/@algolia/autocomplete-core-1.0.0-alpha.43.tgz#9b331845d22fda0d84c7184668a4aa23409132ba"
+  integrity sha1-mzMYRdIv2g2ExxhGaKSqI0CRMro=
+  dependencies:
+    "@algolia/autocomplete-shared" "1.0.0-alpha.43"
+
+"@algolia/autocomplete-js@^1.0.0-alpha.43":
+  version "1.0.0-alpha.43"
+  resolved "https://registry.npm.taobao.org/@algolia/autocomplete-js/download/@algolia/autocomplete-js-1.0.0-alpha.43.tgz#46def4afe446dafdc690222745ad448a837ed849"
+  integrity sha1-Rt70r+RG2v3GkCInRa1EioN+2Ek=
+  dependencies:
+    "@algolia/autocomplete-core" "1.0.0-alpha.43"
+    "@algolia/autocomplete-preset-algolia" "1.0.0-alpha.43"
+    "@algolia/autocomplete-shared" "1.0.0-alpha.43"
+    preact "^10.0.0"
+
+"@algolia/autocomplete-preset-algolia@1.0.0-alpha.43":
+  version "1.0.0-alpha.43"
+  resolved "https://registry.npm.taobao.org/@algolia/autocomplete-preset-algolia/download/@algolia/autocomplete-preset-algolia-1.0.0-alpha.43.tgz#f36b40c99706f3f9576779da8f678b79c199d15f"
+  integrity sha1-82tAyZcG8/lXZ3naj2eLecGZ0V8=
+  dependencies:
+    "@algolia/autocomplete-shared" "1.0.0-alpha.43"
+
+"@algolia/autocomplete-shared@1.0.0-alpha.43":
+  version "1.0.0-alpha.43"
+  resolved "https://registry.npm.taobao.org/@algolia/autocomplete-shared/download/@algolia/autocomplete-shared-1.0.0-alpha.43.tgz#e02a3f2e81171835351f8a782f471d445623fbfa"
+  integrity sha1-4Co/LoEXGDU1H4p4L0cdRFYj+/o=
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.8.3":
   version "7.12.13"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.12.13.tgz#dcfc826beef65e75c50e21d3837d7d95798dd658"
@@ -3771,6 +3800,11 @@ file-loader@^4.2.0:
     loader-utils "^1.2.3"
     schema-utils "^2.5.0"
 
+file-saver@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.npm.taobao.org/file-saver/download/file-saver-2.0.5.tgz?cache=0&sync_timestamp=1605790980036&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffile-saver%2Fdownload%2Ffile-saver-2.0.5.tgz#d61cfe2ce059f414d899e9dd6d4107ee25670c38"
+  integrity sha1-1hz+LOBZ9BTYmendbUEH7iVnDDg=
+
 file-uri-to-path@1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/file-uri-to-path/download/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
@@ -6701,6 +6735,11 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.27, postcss@^7.0.3
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+preact@^10.0.0:
+  version "10.5.12"
+  resolved "https://registry.npm.taobao.org/preact/download/preact-10.5.12.tgz#6a8ee8bf40a695c505df9abebacd924e4dd37704"
+  integrity sha1-ao7ov0CmlcUF35q+us2STk3TdwQ=
 
 prepend-http@^1.0.0:
   version "1.0.4"

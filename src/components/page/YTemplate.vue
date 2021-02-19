@@ -34,8 +34,8 @@ export default {
       pickedTemplate: '',
       list: {
         korea: { desc: '韩国教会', url: '/img/korea.png' },
-        japan: { desc: '日本教会', url: '/img/child.png' },
-        child: { desc: '主日学', url: '/img/japan.png' },
+        japan: { desc: '日本教会', url: '/img/japan.png' },
+        child: { desc: '主日学', url: '/img/child.png' },
         zanmeishi: { desc: 'zms', url: '/img/zanmeishi.png' },
         marry: { desc: '婚礼', url: '/img/marry.png' },
       },
