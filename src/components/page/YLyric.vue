@@ -199,8 +199,14 @@ The hour I first believed.`,
         .get('content-disposition')
         .split(/"(.*)"/gi)[1]
 
-      saveAs(blob, filename)
+      // saveAs(blob, filename)
 
+      let file = new File([blob], filename, { type: 'application/pdf' })
+      let exportUrl = URL.createObjectURL(file)
+      let a = document.createElement('a')
+      a.href = exportUrl
+      a.download = filename
+      a.click()
       function getFormData(object) {
         const formData = new FormData()
         Object.keys(object).forEach((key) => formData.append(key, object[key]))
