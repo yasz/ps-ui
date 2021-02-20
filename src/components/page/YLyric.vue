@@ -125,19 +125,31 @@ The hour I first believed.`,
     onChange: async function (picker, value) {
       let id = value.slice(value.indexOf('|') + 1)
       let title = value.slice(0, value.indexOf('--'))
-
       const res = await fetch(`/song/${id}.html`)
       let text = await res.text()
+
       const parser = new DOMParser()
       const htmlDocument = parser.parseFromString(text, 'text/html')
-      let lyric = 'no lyric'
+      let warning = 'no lyric'
+      let lyric
       try {
         lyric = htmlDocument.documentElement.querySelector('#lyric_editor')
           .innerText
+        if (lyric.length == 0) {
+          lyric = htmlDocument.documentElement
+            .querySelector('.copytxt')
+            .getAttribute('data-clipboard-text')
+            .trim()
+        }
       } catch (err: any) {
-        Toast(lyric)
+        Toast({ message: warning, position: 'top' })
+        return
       }
-      Toast(`~~${title}~~\n${this.lyricProcessor(lyric)}`)
+
+      lyric = this.lyricProcessor(lyric, title)
+      Toast({
+        message: `~~${title}~~\n${lyric}`,
+      })
       this.lyric = lyric
       this.title = title
     },
@@ -174,7 +186,7 @@ The hour I first believed.`,
       fd.append('', title)
       fd.append('', lyric)
 
-      let response = await fetch('http://ruianva.cn:8090/api/unit2', {
+      let response = await fetch('/api/unit2', {
         method: 'POST',
         body: getFormData({
           title: title,
@@ -205,7 +217,7 @@ The hour I first believed.`,
       // this.$store.commit('push', { title: this.title, lyric: this.lyric })
     },
 
-    lyricProcessor: function (lyric: string) {
+    lyricProcessor: function (lyric: string, title: string) {
       //处理不规则的歌词
       let f1 = lyric.split('\n').filter((x, i) => !x.match(/[:|：]/g)) //过滤带:或：行
       let f2: any = [] //处理超长行
@@ -220,10 +232,13 @@ The hour I first believed.`,
       f2 = f2.map((x: string) =>
         x.replace(/[\d|\.|\*|；]+/g, '').replace(/\s+$/g, '')
       ) //处理每行带*
+      let re1 = new RegExp(`^${title}\\n\\n`) //歌词首行标题
+
       return f2
         .join('\n')
         .replace(/(^\s*)|(\s*$)/g, '')
         .replace(/\n\n+/g, '\n\n') //处理头、尾空行
+        .replace(re1, '')
     },
   },
 
