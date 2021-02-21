@@ -17,6 +17,11 @@ import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'app',
+  metaInfo: {
+    title: 'praise slowly v1.5',
+    link: [{ rel: 'icon', href: '/site-icon.png' }],
+  },
+
   props: {
     ...mapState(['songs']),
   },

@@ -13,7 +13,7 @@ module.exports = {
         target: "https://www.zanmeishi.com", // 代理地址
       },
       "/api/": {
-        target: "http://www.ruianva.cn:8090", // 代理地址
+        target: "http://localhost:8090", // 代理地址
       }
     }
   }

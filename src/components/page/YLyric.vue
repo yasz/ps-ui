@@ -4,13 +4,14 @@
       ref="searchRef"
       class="searchStyle"
       v-model="kw"
+      show-action
       placeholder="首拼(如qyed~奇异恩典)"
       @input="onSearch"
       @confirm="onConfirm"
     >
-      <!-- <template #action>
+      <template #action>
         <van-button type="primary" @click="addToExport">添加</van-button>
-      </template> -->
+      </template>
     </van-search>
 
     <van-popup
@@ -73,7 +74,9 @@
       >
         清空列表
       </van-button>
-      <van-button type="primary" @click="exportPPT"> 导出PPT </van-button>
+      <van-button :loading="loading" type="primary" @click="exportPPT">
+        导出PPT
+      </van-button>
     </div>
   </div>
 </template>
@@ -92,6 +95,7 @@ export default {
       showPop: false,
       title: 'Amazing grace',
       columns: [],
+      loading: false,
       lyric: `Amazing Grace, how sweet the sound
 That saved a wretch like me.
 I once was lost but now I'm found,
@@ -173,6 +177,7 @@ The hour I first believed.`,
         alert('至少添加1首诗歌')
         return
       }
+      this.loading = true
       let title = ''
       let lyric = ''
       this.songs.forEach((song) => {
@@ -188,7 +193,7 @@ The hour I first believed.`,
 
       let response = await fetch('/api/unit2', {
         method: 'POST',
-        body: getFormData({
+        body: this.getFormData({
           title: title,
           lyric: lyric,
           template: templateName,
@@ -207,13 +212,13 @@ The hour I first believed.`,
       a.href = exportUrl
       a.download = filename
       a.click()
-      function getFormData(object) {
-        const formData = new FormData()
-        Object.keys(object).forEach((key) => formData.append(key, object[key]))
-        return formData
-      }
+      this.loading = false
     },
-
+    getFormData: function (object) {
+      const formData = new FormData()
+      Object.keys(object).forEach((key) => formData.append(key, object[key]))
+      return formData
+    },
     addToExport: function () {
       if (this.songs.length > 4) {
         alert('不能超过5首！')

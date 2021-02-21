@@ -6,6 +6,9 @@ import App from "./App.vue";
 
 import Vant from "vant";
 import "vant/lib/index.css";
+import VueMeta from "vue-meta";
+
+Vue.use(VueMeta);
 Vue.use(Vant);
 Vue.config.productionTip = false;
 
